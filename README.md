@@ -21,13 +21,13 @@ For each hook you need to set up, you'll need to specify the following:
 * `Auth method` - optional, how you might authenticate with your endpoint. Currently only basic auth is supported
 * `Auth token` - the token for authorization
 
-In order to maximize your mileage with Hookah, there are a few concepts you'll need to understand: `Triggers` and `Transforms`:
+In order to maximize your mileage with Hookah, there are a few concepts you'll need to understand:
 
 ### Triggers
 
 > The wonderful thing about triggers, is triggers are wonderful things.
 
-Triggers are actions that can cause an HTTP callback to be fired. The triggers that Hookah ships with are `CREATE`, `UPDATE`, and `DELETE` – you know these. Whenever these actions occur for a post type that you've specified,
+Triggers are actions that can cause an HTTP callback to be fired. The triggers that Hookah ships with are `CREATE`, `UPDATE`, and `DELETE` – you know these. Whenever these actions occur for a post type that you've specified, an HTTP callback will be sent to the endpoint you've specified. You can rely on the default structure for data to be sent in, or you can specify your own transforms.
 
 ### Transforms
 
@@ -51,6 +51,8 @@ hookah_add_transform('title_and_author', ['post'], function($id){
   return ['post_title' => get_the_title($id), 'post_author' => get_the_author($id)]
 });
 ```
+
+You can obviously do cool things with post meta too! Have fun.
 
 ### Endpoints
 
