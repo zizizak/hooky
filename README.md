@@ -10,6 +10,8 @@ Download the zip, install as normal. Easy-peasy. You'll need to be running at le
 
 Hookah is an interface that allows for relatively painless WebHook setup for your WordPress site. The idea behind the plugin is that you should be able to set up integrations with just a few clicks. Depending on what services you need to integrate with and how custom your site's structure is, it's very possible you won't have to write any code – but if you do, that should be painless too.
 
+<img width="996" alt="screen shot 2017-05-15 at 10 45 16 pm" src="https://cloud.githubusercontent.com/assets/3719099/26087767/bf9252be-39c0-11e7-81f5-97202189561a.png">
+
 For each hook you need to set up, you'll need to specify the following:
 
 * `Post type` - the post type for which the hook should trigger
