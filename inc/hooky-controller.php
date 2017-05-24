@@ -39,7 +39,7 @@ class HookyController {
    * @param  WP_Post  $post    A WordPress post object.
    * @return boolean           True if newly created, false if not.
    *
-   * FIXME: For some reason this is broken;
+   * FIXME: For some reason this is broken
    */
   private function is_created(){
     return ($this->post->post_status === 'publish') && !$this->update;
