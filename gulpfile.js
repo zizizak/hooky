@@ -27,6 +27,19 @@ const map_error = err => {
   }
 }
 
+const bundle_js = bundler => {
+  return bundler.bundle()
+    .on('error', map_error)
+    .pipe(source('main.js'))
+    .pipe(buffer())
+    .pipe(rename('hooky.min.js'))
+    .pipe(sourcemaps.init({loadMaps: true}))
+      .pipe(uglify())
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('assets/dist'))
+      .on('end', () => gutil.log(chalk.green('Rebundle finished')))
+}
+
 gulp.task('watchify', () => {
   let args    = merge(watchify.args, {debug: true})
   let bundler = watchify(browserify('./assets/src/main.js', args))
@@ -36,15 +49,3 @@ gulp.task('watchify', () => {
   bundle_js(bundler)
   bundler.on('update', () => bundle_js(bundler))
 })
-
-const bundle_js = bundler => {
-  return bundler.bundle()
-    .on('error', map_error)
-    .pipe(source('main.js'))
-    .pipe(buffer())
-    .pipe(rename('hookah.min.js'))
-    .pipe(sourcemaps.init({loadMaps: true}))
-    .pipe(uglify())
-    .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest('assets/dist'))
-}

@@ -1,8 +1,8 @@
 import Vue    from 'vue/dist/vue.js'
-import Hookah from './Hookah.vue'
+import Hooky  from './Hooky.vue'
 import Row    from './Row.vue'
 
 new Vue({
   el: '#app',
-  render: h => h(Hookah)
+  render: h => h(Hooky)
 })
