@@ -3,7 +3,7 @@
     <table class="hk">
       <thead class="hk-head">
         <td>Post type</td>
-        <td>Trigger</td>
+        <td>Action</td>
         <td>Filter</td>
         <td>Endpoint</td>
         <td>Endpoint Filter</td>
