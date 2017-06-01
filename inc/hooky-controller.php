@@ -169,5 +169,3 @@ class HookyController {
   }
 
 }
-
-$controller = new HookyController($id, $post, $update);
