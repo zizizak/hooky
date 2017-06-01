@@ -43,10 +43,10 @@ export default {
         action:    'CREATE',
         filter:  'default',
         endpoint:   '',
-        endpoint_filter: '',
-        authmethod: '',
+        endpoint_filter: 'none',
+        authmethod: 'none',
         authtoken:  '',
-        success_callback: '',
+        success_callback: 'none',
         id: null
       })
     },
@@ -56,6 +56,7 @@ export default {
       if(event.id){
         axios.delete(`${site}/hooks/${event.id}`)
         .then(res => {
+          console.log(res)
           this.hooks.splice(index, 1)
         })
         .catch(err => {
@@ -83,8 +84,6 @@ export default {
 
         // Add exisiting hook ID so it can be modified instead of created
         if(hook.id) config.url += `/${hook.id}`
-
-        console.log(config.data);
 
         axios(config)
         .then(res => {

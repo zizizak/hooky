@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const babelify   = require('babelify')
 const browserify = require('browserify')
 const buffer     = require('vinyl-buffer')
@@ -41,6 +43,9 @@ const bundle_js = bundler => {
 }
 
 gulp.task('watchify', () => {
+
+  process.env.NODE_ENV = 'production'
+
   let args    = merge(watchify.args, {debug: true})
   let bundler = watchify(browserify('./assets/src/main.js', args))
     .transform(babelify, {presets: ['es2015']})

@@ -14,6 +14,8 @@ define('HOOKY_SESSION_ERR', 'hooky_errs');
 define('HOOKY_SESSION_SUCCESS', 'hooky_succeess');
 
 require_once('inc/hooky-public.php');
+require_once('inc/hooky-hooks.php');
+require_once('inc/hooky-controller.php');
 
 class Hooky {
   function __construct(){
@@ -28,7 +30,6 @@ class Hooky {
     register_activation_hook(__FILE__, array($this, 'hooky_db'));
 
     require_once('inc/hooky-callbacks.php');
-    require_once('inc/hooky-hooks.php');
     require_once('inc/hooky-send.php');
   }
 
@@ -87,8 +88,8 @@ class Hooky {
    * TODO: Add ability to register other actions that can occur during runtime
    * that will work with HookyController.
    */
-  function hooky_save($id, $post, $update){
-    require_once('inc/hooky-controller.php');
+  function hooky_save($id, $post){
+    $controller = new HookyController($id, $post, $update);
   }
 
   /**
