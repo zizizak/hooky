@@ -2,7 +2,7 @@
   <tr class="hk-row">
     <td>
       <select @change="$emit('update-hook', {$event, field: 'type'})">
-        <option v-for="(value, key) in filters" :selected="key === hook.type">{{key}}</option>
+        <option v-for="(value, key) in types" :selected="value === hook.type">{{value}}</option>
       </select>
     </td>
     <td>
@@ -14,7 +14,11 @@
     </td>
     <td>
       <select @change="$emit('update-hook', {$event, field: 'filter'})">
-        <option v-for="(filter, index) in filters[hook.type]" :selected="filter.alias === hook.filter">{{filter.alias}}</option>
+        <option
+          v-for="(filter, index) in nestedArrayMerge(filters['default'], filters[hook.type])"
+          v-if="filter"
+          :selected="filter.alias === hook.filter"
+        >{{filter.alias}}</option>
       </select>
     </td>
     <td>
@@ -22,7 +26,11 @@
     </td>
     <td>
       <select @change="$emit('update-hook', {$event, field: 'endpoint_filter'})">
-        <option v-for="(endpoint_filter, index) in endpoint_filters[hook.type]" :selected="endpoint_filter.alias === hook.endpoint_filter">{{endpoint_filter.alias}}</option>
+        <option
+          v-for="(endpoint_filter, index) in nestedArrayMerge(endpoint_filters['default'], endpoint_filters[hook.type])"
+          v-if="endpoint_filter"
+          :selected="endpoint_filter.alias === hook.endpoint_filter"
+        >{{endpoint_filter.alias}}</option>
       </select>
     </td>
     <td>
@@ -36,7 +44,11 @@
     </td>
     <td>
       <select @change="$emit('update-hook', {$event, field: 'success_callback'})">
-        <option v-for="(success_callback, index) in success_callbacks[hook.type]" :selected="success_callback.alias === hook.success_callback">{{success_callback.alias}}</option>
+        <option
+          v-for="(success_callback, index) in nestedArrayMerge(success_callbacks['default'], success_callbacks[hook.type])"
+          v-if="success_callback"
+          :selected="success_callback.alias === hook.success_callback"
+        >{{success_callback.alias}}</option>
       </select>
     </td>
     <td>
@@ -50,9 +62,20 @@ export default {
   props: ['hook'],
   data: function(){
     return {
+      types: window.hooky_types,
       filters: window.hooky_filters,
       endpoint_filters: window.hooky_endpoint_filters,
       success_callbacks: window.hooky_success_callbacks
+    }
+  },
+  methods: {
+    nestedArrayMerge: (...items) =>{
+      let merged = []
+      for(let item of items){
+        if(!item) continue
+        merged.push(...item)
+      }
+      return merged
     }
   }
 }

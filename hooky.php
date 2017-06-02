@@ -89,7 +89,7 @@ class Hooky {
    * that will work with HookyController.
    */
   function hooky_save($id, $post){
-    $controller = new HookyController($id, $post, $update);
+    $controller = new HookyController($id, $post);
   }
 
   /**

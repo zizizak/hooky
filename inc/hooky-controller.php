@@ -9,10 +9,9 @@
 
 class HookyController {
 
-  function __construct($id, $post, $update){
+  function __construct($id, $post){
     $this->id = $id;
     $this->post = $post;
-    $this->update = $update;
     $this->type = get_post_type($id);
     $hooks = get_hooks_by_type($this->type);
 
@@ -21,13 +20,13 @@ class HookyController {
       $action = $hook->action;
       switch($action){
         case 'CREATE':
-          if($this->is_created()) $this->handle_send($hook, $id, $post);
+          if($this->is_created($post)) $this->handle_send($hook, $id, $post);
           break;
         case 'UPDATE':
-          if($this->is_updated()) $this->handle_send($hook, $id, $post);
+          if($this->is_updated($post)) $this->handle_send($hook, $id, $post);
           break;
         case 'DELETE':
-          if($this->is_deleted()) $this->handle_send($hook, $id, $post);
+          if($this->is_deleted($post)) $this->handle_send($hook, $id, $post);
           break;
       }
     }
@@ -38,11 +37,9 @@ class HookyController {
    *
    * @param  WP_Post  $post    A WordPress post object.
    * @return boolean           True if newly created, false if not.
-   *
-   * FIXME: For some reason this is broken
    */
-  private function is_created(){
-    return ($this->post->post_status === 'publish') && !$this->update;
+  private function is_created($post){
+    return ($post->post_status === 'publish') && ($post->post_date_gmt === $post->post_modified_gmt);
   }
 
   /**
@@ -51,8 +48,8 @@ class HookyController {
    * @param  WP_Post  $post    A WordPress post object.
    * @return boolean           True if updated, false if not.
    */
-  private function is_updated(){
-    return ($this->post->post_status === 'publish') && $this->update;
+  private function is_updated($post){
+    return ($post->post_status === 'publish') && ($post->post_date_gmt !== $post->post_modified_gmt);
   }
 
   /**
@@ -61,8 +58,8 @@ class HookyController {
    * @param  WP_Post  $post    A WordPress post object.
    * @return boolean           True if deleted, false if not.
    */
-  private function is_deleted(){
-    return $this->post->post_status === 'trash';
+  private function is_deleted($post){
+    return $post->post_status === 'trash';
   }
 
   /**
@@ -131,6 +128,7 @@ class HookyController {
     foreach($endpoint_filters as $endpoint_filter){
       if($endpoint_filter->alias === $hook->endpoint_filter){
         $callback = $endpoint_filter->callback;
+        if(!$callback) continue;
         $hook->endpoint = $callback($hook->endpoint, $post);
         break;
       }
@@ -149,10 +147,12 @@ class HookyController {
           global $hooky_success_callbacks;
           $success_callbacks = $hooky_success_callbacks[$this->type];
 
+          if(!$success_callbacks) return;
 
           foreach($success_callbacks as $success_callback){
             if($success_callback->alias === $hook->success_callback){
               $callback = $success_callback->callback;
+              if(!$callback) continue;
               $callback($id, $response);
             }
           }
@@ -161,7 +161,7 @@ class HookyController {
       // Error
       function($err) use ($hook) {
         $label = "$hook->endpoint on $hook->action";
-        $message = $err->get_error_message();
+        $message = $err['body'];
         $_SESSION[HOOKY_SESSION_ERR][] = "<strong>$label</strong>: $message";
       }
     );
@@ -169,5 +169,3 @@ class HookyController {
   }
 
 }
-
-$controller = new HookyController($id, $post, $update);

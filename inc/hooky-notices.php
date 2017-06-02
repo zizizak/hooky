@@ -14,10 +14,10 @@ if(array_key_exists(HOOKY_SESSION_ERR, $_SESSION)):
 endif;
 
 if(array_key_exists(HOOKY_SESSION_SUCCESS, $_SESSION)):
-  foreach($_SESSION[HOOKY_SESSION_SUCCESS] as $err):
+  foreach($_SESSION[HOOKY_SESSION_SUCCESS] as $message):
 ?>
     <div class="notice notice-success">
-      <p><?php echo $err; ?></p>
+      <p><?php echo $message; ?></p>
     </div>
 <?php
   endforeach;
