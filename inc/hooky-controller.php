@@ -146,9 +146,7 @@ class HookyController {
         if($hook->success_callback){
           global $hooky_success_callbacks;
           $success_callbacks = $hooky_success_callbacks[$this->type];
-
           if(!$success_callbacks) return;
-
           foreach($success_callbacks as $success_callback){
             if($success_callback->alias === $hook->success_callback){
               $callback = $success_callback->callback;
