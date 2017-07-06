@@ -55,7 +55,8 @@ class Hooky {
     wp_localize_script('hooky/js', 'hooky_endpoint_filters', $hooky_endpoint_filters);
     wp_localize_script('hooky/js', 'hooky_success_callbacks', $hooky_success_callbacks);
     wp_localize_script('hooky/js', 'site_url', site_url() . '/wp-json/' . HOOKY_NAMESPACE);
-    wp_localize_script('hooky/js', 'hooky_hooks', get_hooks());
+    wp_localize_script('hooky/js', 'hooky_hooks', hooky_get_hooks());
+    wp_localize_script('hooky/js', 'hooky_types', hooky_get_types());
   }
 
   /**

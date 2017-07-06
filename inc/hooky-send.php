@@ -30,18 +30,16 @@ class HookySend {
    * @return void
    */
   public function send($success = null, $err = null){
-    if($this->endpoint_filter){
-      $endpoint = $this->endpoint_filter($this->endpoint, $this->data);
-    } else {
-      $endpoint = $this->endpoint;
-    }
-
-    $submit = wp_remote_post($endpoint, [
+    $submit = wp_remote_post($this->endpoint, [
       'headers' => $this->headers,
-      'body'    => $this->body
+      'body'    => $this->body,
+      'timeout' => 60
     ]);
 
-    if($submit['response']['code'] === 200 || $submit['response']['code'] === 201){
+    if(
+      is_array($submit) &&
+      isset($submit['response']) &&
+      $submit['response']['code'] === 200 || $submit['response']['code'] === 201){
       if($success) $success($submit);
     } elseif($err) {
       $err($submit);

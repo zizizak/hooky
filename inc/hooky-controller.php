@@ -129,10 +129,12 @@ class HookyController {
       if($endpoint_filter->alias === $hook->endpoint_filter){
         $callback = $endpoint_filter->callback;
         if(!$callback) continue;
-        $hook->endpoint = $callback($hook->endpoint, $post);
+        $hook->endpoint = $callback($hook->endpoint, $id);
         break;
       }
     }
+
+    if(!$hook->endpoint) return;
 
     $sender = new HookySend($data, $hook->endpoint, $auth);
 
